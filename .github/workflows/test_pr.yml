@@ -1,4 +1,4 @@
-name: Run tests
+name: Correctness
 on:
     pull_request:
         branches:
