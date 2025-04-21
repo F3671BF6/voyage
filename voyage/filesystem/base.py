@@ -12,8 +12,9 @@ class Path:
         path : voyage.filesystem.base.Path | str | pathlib.Path
             String or pathlib.Path object.
         """
-        self._parts = _p.Path(str(path)).parts
-        self._path_str = str(_p.Path(str(path)))
+        unix_path = str(path).replace("\\", "/")
+        self._parts = _p.Path(unix_path).parts
+        self._path_str = str(_p.Path(unix_path))
 
     def __repr__(self) -> str:
         """Representation depends on the system running the code"""
@@ -32,7 +33,4 @@ class Path:
         bool
             Equality.
         """
-        print("---")
-        print(self._parts)
-        print(_p.Path(str(value)).parts)
         return self._parts == _p.Path(str(value)).parts
