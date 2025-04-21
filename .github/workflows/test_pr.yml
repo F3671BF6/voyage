@@ -19,7 +19,7 @@ jobs:
 
             - name: Export voyage
               run: |
-                PWD=$(PWD)
+                PWD=$(pwd)
                 echo "PYTHONPATH=$PWD/voyage:$PWD/tests:$PYTHONPATH" >> $GITHUB_ENV
 
             - name: Install dependencies
