@@ -17,6 +17,11 @@ jobs:
             - name: Install python
               run: uv python install
 
+            - name: Export voyage
+              run: |
+                PWD=$(PWD)
+                echo "PYTHONPATH=$PWD/voyage:$PWD/tests:$PYTHONPATH" >> $GITHUB_ENV
+
             - name: Install dependencies
               run: uv sync --all-extras --dev
             
