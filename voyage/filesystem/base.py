@@ -32,4 +32,4 @@ class Path:
         bool
             Equality.
         """
-        return str(self) == str(_p.Path(str(value)))
+        return self._parts == _p.Path(str(value)).parts
