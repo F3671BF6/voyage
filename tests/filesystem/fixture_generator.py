@@ -1,7 +1,6 @@
 from typing import List, Tuple
 
-from voyage.filesystem.directory import Directory
-from voyage.filesystem.file import File
+from voyage.filesystem import Directory, File
 
 _AbstractFile = Tuple[str, str]
 _AbstractDir = Tuple[str, List["_AbstractDir" | _AbstractFile]]
@@ -13,14 +12,14 @@ def generate_mock_file_and_dir(root_dir: _AbstractFileSystem):
         def read(self):
             content = _find_in_abstract_filesystem(root_dir, self._parts)
             if not isinstance(content, str):
-                raise TypeError(f"{self._path_str} is not a string in the abstract filesystem.")
+                raise TypeError(f"{self} is not a string in the abstract filesystem.")
             return content
 
     class MockDirectory(Directory):
         def list(self):
             content = _find_in_abstract_filesystem(root_dir, self._parts)
             if not isinstance(content, list):
-                raise TypeError(f"{self._path_str} is not a list in the abstract filesystem.")
+                raise TypeError(f"{self} is not a list in the abstract filesystem.")
             content = sorted(content, key=lambda x: x[0])
             directories = []
             files = []
@@ -31,12 +30,19 @@ def generate_mock_file_and_dir(root_dir: _AbstractFileSystem):
                     files.append(name)
             return directories + files
 
+        def make_dir(self) -> bool:
+            parent_dir_content = _find_in_abstract_filesystem(root_dir, self._parts[:-1])
+            if not isinstance(parent_dir_content, list):
+                return False
+            parent_dir_content.append((self._parts[-1], []))
+            return True
+
     # @fixture(autouse=True)
     # def fixture_filesystem():
     #     MockFile, MockDirectory = generate_mock_file_and_dir(...)
     #     with (
-    #         patch("voyage.filesystem.directory.Directory", MockDirectory),
-    #         patch("voyage.filesystem.file.File", MockFile),
+    #         patch("voyage.filesystem.Directory", MockDirectory),
+    #         patch("voyage.filesystem.File", MockFile),
     #     ):
     #         yield
 

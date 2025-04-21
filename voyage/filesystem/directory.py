@@ -1,3 +1,4 @@
+import logging as _log
 import pathlib as _p
 import typing as _t
 
@@ -13,7 +14,7 @@ class Directory(_b.Path):
 
         Returns
         -------
-        List[Path]
+        List[voyage.filesystem.base.Path]
             List of elements, alphabetically sorted, directories coming before files.
         """
         path = _p.Path(*self._parts)
@@ -27,6 +28,36 @@ class Directory(_b.Path):
                 files.append(_f.File(item))
         return directories + files
 
+    def make_dir(self) -> bool:
+        """Create directory at this path
 
-def run():
-    pass
+        Returns
+        -------
+        bool
+            Whether the operation was successful.
+        """
+        path = _p.Path(self._path_str)
+        try:
+            path.mkdir()
+            return True
+        except Exception as exc:
+            _LOGGER.warning(exc)
+            return False
+
+    def __truediv__(self, item: str) -> _b.Path:
+        """Append a directory/file to self
+
+        Parameters
+        ----------
+        item : str
+            Directory/file to concatenate.
+
+        Returns
+        -------
+        voyage.filesystem.base.Path
+            Path to the directory/file.
+        """
+        return _b.Path(_p.Path(str(self)) / item)
+
+
+_LOGGER = _log.getLogger(__name__)
