@@ -32,4 +32,5 @@ class Path:
         bool
             Equality.
         """
+        print("new version")
         return self._parts == _p.Path(str(value)).parts
