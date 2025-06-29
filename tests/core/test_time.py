@@ -1,8 +1,9 @@
 from datetime import date, datetime
 
 from pandas import Timestamp
+from pytest import raises
 
-from voyage.core.time import DateTime
+from voyage.core.time import DateTime, Days, Months, Weeks, Years
 
 
 def test_datetime_init():
@@ -47,3 +48,21 @@ def test_ordering():
     assert x < other
     assert not (x >= other)
     assert not (x > other)
+
+
+def test_timedelta():
+    x = DateTime("2020-01-01 12:30")
+    assert x + Days(2) == DateTime("2020-01-03 12:30")
+    assert x - Days(2) == DateTime("2019-12-30 12:30")
+    assert Days(2) + x == DateTime("2020-01-03 12:30")
+    with raises(TypeError):
+        Days(2) - x  # type:ignore
+
+    assert x + Weeks(2) == DateTime("2020-01-15 12:30")
+    assert x - Weeks(2) == DateTime("2019-12-18 12:30")
+
+    assert x + Months(2) == DateTime("2020-03-01 12:30")
+    assert x - Months(2) == DateTime("2019-11-01 12:30")
+
+    assert x + Years(2) == DateTime("2022-01-01 12:30")
+    assert x - Years(2) == DateTime("2018-01-01 12:30")

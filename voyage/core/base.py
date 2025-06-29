@@ -2,6 +2,7 @@ import abc as _abc
 import datetime as _dt
 import typing as _t
 
+import dateutil.relativedelta as _rd
 import pandas as _pd
 
 
@@ -25,3 +26,20 @@ class DateTime(_abc.ABC):
 
 
 IntoDateTime: _t.TypeAlias = DateTime | _dt.date | _dt.datetime | _pd.Timestamp | str
+
+
+class TimeDelta:
+    period: str
+    amount: int
+    _relativedelta: _rd.relativedelta
+
+    def __init__(self, amount: int) -> None:
+        self.amount = amount
+
+    def __repr__(self) -> str:
+        return f"{self.amount}{self.period}"
+
+    def __eq__(self, other: "TimeDelta") -> bool:
+        return (self.amount == 0 and other.amount == 0) or (
+            self.period == other.period and self.amount == other.amount
+        )
