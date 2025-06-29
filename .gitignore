@@ -30,6 +30,9 @@ MANIFEST
 .pytest_cache/
 sandbox.ipynb
 
+# Data
+data/
+
 # Jupyter Notebook
 .ipynb_checkpoints
 profile_default/
